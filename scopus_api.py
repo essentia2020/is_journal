@@ -28,10 +28,10 @@ print(publications)
 cursor = connection.cursor()
 for item in publications:
     doi = item['prism:doi']
-    citedby = item['citedby-count']
+    citedby = int(item['citedby-count'])
     sql = ("INSERT INTO scopus "
            "(doi, citedby_sco) "
-           "VALUES (%s, %s)")
+           "VALUES (%s, %i)")
     cursor.execute(sql, (doi, citedby))
     connection.commit()
 
