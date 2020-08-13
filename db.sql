@@ -11,7 +11,9 @@ CREATE TABLE articles
     start_page TINYINT(4) UNSIGNED,
     end_page TINYINT(4) UNSIGNED,
     doi VARCHAR(255) NOT NULL PRIMARY KEY,
-    title_ru TEXT -- Название на русском языке
+    title_ru TEXT, -- Название на русском языке
+    citedby_sco SMALLINT UNSIGNED DEFAULT 0,
+    citedby_wos SMALLINT UNSIGNED DEFAULT 0
 );
 
 -- Авторов выносим в отдельную таблицу, т.к. их может быть несколько в статье
@@ -145,21 +147,6 @@ CREATE TABLE wos
     citedby_wos SMALLINT UNSIGNED DEFAULT 0,
     FOREIGN KEY (doi) REFERENCES articles (doi)
 );
-
--- Триггер, который добавляет doi из таблицы articles
-DELIMITER //
-
-CREATE
-	TRIGGER `doi_insert` AFTER INSERT 
-	ON `articles` 
-	FOR EACH ROW BEGIN
-		INSERT INTO scopus (doi) VALUES 
-        (articles.doi);
-        INSERT INTO wos (doi) VALUES 
-        (articles.doi);
-	END//
- 
-DELIMITER ;
 
 -- Добавляем таблицу рецензирования
 CREATE TABLE reviews
