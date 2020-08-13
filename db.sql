@@ -131,23 +131,6 @@ CREATE TABLE articles_keywords
     ON UPDATE CASCADE
 );
 
--- Добавляем данные по цитированию в Scopus
-CREATE TABLE scopus
-(
-	doi VARCHAR(255) NOT NULL UNIQUE,
-    citedby_sco SMALLINT UNSIGNED DEFAULT 0,
-    FOREIGN KEY (doi) REFERENCES articles (doi)
-);
-
-
--- Добавляем данные по цитированию в Web of Science
-CREATE TABLE wos
-(
-	doi VARCHAR(255) NOT NULL UNIQUE,
-    citedby_wos SMALLINT UNSIGNED DEFAULT 0,
-    FOREIGN KEY (doi) REFERENCES articles (doi)
-);
-
 -- Добавляем таблицу рецензирования
 CREATE TABLE reviews
 (
