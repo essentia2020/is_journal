@@ -11,7 +11,9 @@ CREATE TABLE articles
     start_page TINYINT(4) UNSIGNED,
     end_page TINYINT(4) UNSIGNED,
     doi VARCHAR(255) NOT NULL PRIMARY KEY,
-    title_ru TEXT -- Название на русском языке
+    title_ru TEXT, -- Название на русском языке
+    citedby_sco SMALLINT UNSIGNED DEFAULT 0,
+    citedby_wos SMALLINT UNSIGNED DEFAULT 0
 );
 
 -- Авторов выносим в отдельную таблицу, т.к. их может быть несколько в статье
@@ -127,22 +129,6 @@ CREATE TABLE articles_keywords
     ON UPDATE CASCADE,
     FOREIGN KEY (key_id) REFERENCES keywords (key_id)
     ON UPDATE CASCADE
-);
-
--- Добавляем данные по цитированию в Scopus
-CREATE TABLE scopus
-(
-	doi VARCHAR(255) NOT NULL UNIQUE,
-    citedby_sco SMALLINT UNSIGNED,
-    FOREIGN KEY (doi) REFERENCES articles (doi)
-);
-
--- Добавляем данные по цитированию в Web of Science
-CREATE TABLE wos
-(
-	doi VARCHAR(255) NOT NULL UNIQUE,
-    citedby_wos SMALLINT UNSIGNED,
-    FOREIGN KEY (doi) REFERENCES articles (doi)
 );
 
 -- Добавляем таблицу рецензирования
