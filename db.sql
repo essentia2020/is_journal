@@ -133,17 +133,33 @@ CREATE TABLE articles_keywords
 CREATE TABLE scopus
 (
 	doi VARCHAR(255) NOT NULL UNIQUE,
-    citedby_sco SMALLINT UNSIGNED,
+    citedby_sco SMALLINT UNSIGNED DEFAULT 0,
     FOREIGN KEY (doi) REFERENCES articles (doi)
 );
+
 
 -- Добавляем данные по цитированию в Web of Science
 CREATE TABLE wos
 (
 	doi VARCHAR(255) NOT NULL UNIQUE,
-    citedby_wos SMALLINT UNSIGNED,
+    citedby_wos SMALLINT UNSIGNED DEFAULT 0,
     FOREIGN KEY (doi) REFERENCES articles (doi)
 );
+
+-- Триггер, который добавляет doi из таблицы articles
+DELIMITER //
+
+CREATE
+	TRIGGER `doi_insert` AFTER INSERT 
+	ON `articles` 
+	FOR EACH ROW BEGIN
+		INSERT INTO scopus (doi) VALUES 
+        (articles.doi);
+        INSERT INTO wos (doi) VALUES 
+        (articles.doi);
+	END//
+ 
+DELIMITER ;
 
 -- Добавляем таблицу рецензирования
 CREATE TABLE reviews
